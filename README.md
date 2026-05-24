@@ -12,6 +12,8 @@ Mi camino aprendiendo Python desde cero, en mayo de 2026.
 - **calculadora_v2.py** — Versionamos la calculadora con nuestra nueva funcion.
 - **practica_listas.py** — Calentamiento en listas, practicamos sus funciones.
 - **calculadora_v3.py** — Versionamos la calculadora ahora con un registro de sesion y resumen diario.
+- **practica_diccionarios.py** — Practica de diccionarios, sintaxys, listas de diccionarios, etc...
+- **calculadora_v4.py** — V4 de la calculadora ya no usamos listas, usamos listas de diccionarios se hace cierre de caja al finalizar el ciclo.
 
 
 ## Aprendizajes clave
@@ -22,10 +24,14 @@ Mi camino aprendiendo Python desde cero, en mayo de 2026.
 - Validación de entrada en capas (tipo y rango).
 - Lectura de tracebacks y debugging empírico.
 - Control de versiones con Git y GitHub.
-- Funciones Propias
-- listas
-- Bucle for
-- Manejo de divergencia en Git
+- Funciones Propias.
+- Listas.
+- Bucle for.
+- Manejo de divergencia en Git.
+- Diccionarios.
+- Listas de diccionarios.
+- Funcion lambda para max/min
+- Generator expressions
 
 ## Evolución del proyecto
 
