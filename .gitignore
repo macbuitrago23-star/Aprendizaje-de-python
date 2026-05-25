@@ -1,0 +1,7 @@
+# Datos generados por la calculadora
+historial.json
+prueba.json
+
+# Cache de Python (Python lo genera automáticamente al ejecutar)
+__pycache__/
+*.pyc
