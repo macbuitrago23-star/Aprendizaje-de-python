@@ -14,6 +14,8 @@ Mi camino aprendiendo Python desde cero, en mayo de 2026.
 - **calculadora_v3.py** — Versionamos la calculadora ahora con un registro de sesion y resumen diario.
 - **practica_diccionarios.py** — Practica de diccionarios, sintaxys, listas de diccionarios, etc...
 - **calculadora_v4.py** — V4 de la calculadora ya no usamos listas, usamos listas de diccionarios se hace cierre de caja al finalizar el ciclo.
+- **practica_archivos.py** — Practica de archivos JSON para persistencia de datos.
+- **calculadora_v5.py** — V5 calculadora ahora tenemos persistencia de cada cliente para cierres de caja mensuales.
 
 
 ## Aprendizajes clave
@@ -30,8 +32,12 @@ Mi camino aprendiendo Python desde cero, en mayo de 2026.
 - Manejo de divergencia en Git.
 - Diccionarios.
 - Listas de diccionarios.
-- Funcion lambda para max/min
-- Generator expressions
+- Funcion lambda para max/min.
+- Generator expressions.
+- Libreria pathlib.
+- Uso de Counter.
+- Manejo de archivos JSON.
+- .gitignore
 
 ## Evolución del proyecto
 
@@ -40,6 +46,8 @@ La calculadora de propinas se desarrolló en tres versiones que muestran progres
 - **v1 (`calculadora.py`):** lógica básica con tres bloques de validación repetidos.
 - **v2 (`calculadora_v2.py`):** refactorizada usando la función `pedir_numero` para eliminar repetición.
 - **v3 (`calculadora_v3.py`):** registro de sesión con múltiples cuentas y resumen del día.
+- **v4 (`calculadora_v4.py`):** registro de sesion con multiples cuentas, uso de diccionarios y resumen del día.
+- **v5 (`calculadora_v5.py`):** persistencia de datos(cuentas) resumen diario y resumen historico.
 
 ## Stack
 
