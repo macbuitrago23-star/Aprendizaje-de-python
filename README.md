@@ -16,6 +16,8 @@ Mi camino aprendiendo Python desde cero, en mayo de 2026.
 - **calculadora_v4.py** — V4 de la calculadora ya no usamos listas, usamos listas de diccionarios se hace cierre de caja al finalizar el ciclo.
 - **practica_archivos.py** — Practica de archivos JSON para persistencia de datos.
 - **calculadora_v5.py** — V5 calculadora ahora tenemos persistencia de cada cliente para cierres de caja mensuales.
+- **api_desde_cero.py** — Practica de APIs desde cero nivel por nivel.
+- **practica_paises.py** — Practica de APIs, navegación de JSON anidado y lectura de JSON crudo.
 
 
 ## Aprendizajes clave
@@ -38,6 +40,11 @@ Mi camino aprendiendo Python desde cero, en mayo de 2026.
 - Uso de Counter.
 - Manejo de archivos JSON.
 - .gitignore
+- Instalar librerias externas con pip.
+- Hacer pedidos GET con requests.
+- Verificar status codes (200 vs 404).
+- Navegar JSON anidado (listas dentro de diccionarios, diccionarios dentro de diccionarios).
+- Manejo de errores de conexión y de recursos inexistentes.
 
 ## Evolución del proyecto
 
