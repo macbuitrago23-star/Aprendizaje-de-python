@@ -18,6 +18,7 @@ Mi camino aprendiendo Python desde cero, en mayo de 2026.
 - **calculadora_v5.py** — V5 calculadora ahora tenemos persistencia de cada cliente para cierres de caja mensuales.
 - **api_desde_cero.py** — Practica de APIs desde cero nivel por nivel.
 - **practica_paises.py** — Practica de APIs, navegación de JSON anidado y lectura de JSON crudo.
+- **caja.py** — Sistema de caja con menu, manejo de errores de rango, tipo, persistencia, diccionarios, listas, listas de diccionarios.
 
 
 ## Aprendizajes clave
