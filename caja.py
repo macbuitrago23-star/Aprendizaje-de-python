@@ -2,8 +2,6 @@
 import sys
 from datetime import datetime
 import json
-from collections import Counter
-import os
 from anthropic import Anthropic
 
 #   --- FUNCIONES ---   
@@ -47,6 +45,37 @@ def cargar_historial(ruta="historial_caja.json"): #Definimos cargar_historial co
 def guardar_historial(cuentas, ruta="historial_caja.json"): #Definimos guardar_historial con los parametros cuentas, y ruta con un valor por defecto.
     with open(ruta, "w", encoding="utf-8") as archivo: #Abrimos la ruta en modo escritura para guardar los nuevos datos.
         json.dump(cuentas, archivo, indent=2, ensure_ascii=False) #Escribimos el contenido de cuentas en el archivo de formato JSON.
+
+
+def analizar_con_ia(datos, pregunta):
+    prompt = input(pregunta).strip()
+    facturado = sum(x['total'] for x in datos)
+    cliente = Anthropic()
+    detalles = ""
+    for cuenta in datos:
+        detalles += f"- Cliente: {cuenta['cliente']}, Total: ${cuenta['total']}, Propina: {cuenta['propina_pct']}%, Personas: {cuenta['personas']}, Hora: {cuenta['hora']}\n"   
+
+
+    mensaje = cliente.messages.create(
+        model="claude-opus-4-8",
+        max_tokens=1024,
+        system= f"""Eres un analista de mercado y economista especializado con negocios pequeños y medianos. Analizà los siguientes datos de caja y dame 3 observaciones útiles y accionables para el dueño. Sé concreto y breve.
+                                        
+                    === Datos de la jornada ===
+                    - Cantidad de cuentas registradas: {len(datos)}
+                    - Total facturado historico: {facturado}
+
+                    Detalle cuentas:
+                        \n{detalles}
+
+                    Dame tu análisis en lenguaje claro, como si le hablaras al dueño del restaurante.""",
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
+    )
+                                        
+    print("\n=== ANÁLISIS CON IA ===\n")
+    print(mensaje.content[0].text)
 
 
 
@@ -157,71 +186,17 @@ while intentos_menu < 2: #Mientras el contador de intentos_menu sea menor a 2 si
                 print("1. Analizar el facturado historico.")
                 print("2. Analizar facturado del día.")
                 opcion_ia = int(input(f"\n¿Que quieres analizar hoy? "))
-                cliente = Anthropic()
 
                 if opcion_ia in [1]:
                     if len(historial_cuentas) == 0:
                         print("No hay ninguna cuenta registrada en el historial. Registra una y intenta de nuevo.")
                     else:
-                        prompt_1 = input("¿Que análisis quieres que realice la IA? Escribe tu pregunta o indicación para el análisis: ")
-                        detalles_historial = ""
-                        for c in historial_cuentas:
-                            detalles_historial += f"- Cliente: {c['cliente']}, Total: ${c['total']}, Propina: {c['propina_pct']}%, Personas: {c['personas']}, Hora: {c['hora']}\n"
-                            facturado_total_ia = sum(c['total'] for c in historial_cuentas)
-
-                        mensaje_historico = cliente.messages.create(
-                            model="claude-opus-4-8",
-                            max_tokens=1024,
-                            system=f"""Eres un analista de mercado y economista especializado con negocios pequeños y medianos. Analizà los siguientes datos de caja y dame 3 observaciones útiles y accionables para el dueño. Sé concreto y breve.
-                                        
-                            === Datos de la jornada ===
-                            - Cantidad de cuentas registradas: {len(historial_cuentas)}
-                            - Total facturado historico: {facturado_total_ia}
-
-                            Detalle cuentas:
-                                \n{detalles_historial}
-
-                            Dame tu análisis en lenguaje claro, como si le hablaras al dueño del restaurante.""",
-                            messages=[
-                                {"role": "user", "content": prompt_1}
-                            ]
-                        )
-
-                    print("\n=== ANÁLISIS DE LA IA ===\n")
-                    print(mensaje_historico.content[0].text)
-
+                        analizar_con_ia(historial_cuentas, "¿Que análisis quieres que realice la IA? Escribe tu pregunta o indicación para el análisis: ")
                 elif opcion_ia in [2]:
                     if len(cuentas_dia) == 0:
                         print("No haz registrado cuentas en el Día de hoy. Registra una y vuelve a intentarlo.") #Si no hay cuentas registradas en el día se le informa al usuario.
                     else:
-                        prompt_2 = input("¿Que análisis quieres que realice la IA? Escribe tu pregunta o indicación para el análisis: ")
-                        detalles_dia = ""
-                        for c in cuentas_dia:
-                            detalles_dia += f"- Cliente: {c['cliente']}, Total: ${c['total']}, Propina: {c['propina_pct']}%, Personas: {c['personas']}, Hora: {c['hora']}\n" 
-                            facturado_dia_ia = sum(c['total'] for c in cuentas_dia)  
-
-
-                        mensaje_dia = cliente.messages.create(
-                            model="claude-opus-4-8",
-                            max_tokens=1024,
-                            system= f"""Eres un analista de mercado y economista especializado con negocios pequeños y medianos. Analizà los siguientes datos de caja y dame 3 observaciones útiles y accionables para el dueño. Sé concreto y breve.
-                                        
-                                === Datos de la jornada ===
-                                - Cantidad de cuentas registradas: {len(cuentas_dia)}
-                                - Total facturado historico: {facturado_dia_ia}
-
-                                Detalle cuentas:
-                                    \n{detalles_dia}
-
-                                Dame tu análisis en lenguaje claro, como si le hablaras al dueño del restaurante.""",
-                                messages=[
-                                    {"role": "user", "content": prompt_2}
-                                ]
-                            )
-                                    
-                        print("\n=== ANÁLISIS DE LA IA ===\n")
-                        print(mensaje_dia.content[0].text)
-
+                        analizar_con_ia(cuentas_dia, "¿Que análisis quieres que realice la IA? Escribe tu pregunta o indicación para el análisis: ")
                 else:
                     print("Lo siento eso no es una opcion valida. Intenta de nuevo.")
             except ValueError:
