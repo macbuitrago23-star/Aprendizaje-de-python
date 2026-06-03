@@ -157,8 +157,6 @@ while intentos_menu < 2: #Mientras el contador de intentos_menu sea menor a 2 si
                 print("1. Analizar el facturado historico.")
                 print("2. Analizar facturado del día.")
                 opcion_ia = int(input(f"\n¿Que quieres analizar hoy? "))
-                detalles_historial = ""
-                detalles_día = ""
                 cliente = Anthropic()
 
                 if opcion_ia in [1]:
@@ -166,6 +164,7 @@ while intentos_menu < 2: #Mientras el contador de intentos_menu sea menor a 2 si
                         print("No hay ninguna cuenta registrada en el historial. Registra una y intenta de nuevo.")
                     else:
                         prompt_1 = input("¿Que análisis quieres que realice la IA? Escribe tu pregunta o indicación para el análisis: ")
+                        detalles_historial = ""
                         for c in historial_cuentas:
                             detalles_historial += f"- Cliente: {c['cliente']}, Total: ${c['total']}, Propina: {c['propina_pct']}%, Personas: {c['personas']}, Hora: {c['hora']}\n"
                             facturado_total_ia = sum(c['total'] for c in historial_cuentas)
@@ -196,6 +195,7 @@ while intentos_menu < 2: #Mientras el contador de intentos_menu sea menor a 2 si
                         print("No haz registrado cuentas en el Día de hoy. Registra una y vuelve a intentarlo.") #Si no hay cuentas registradas en el día se le informa al usuario.
                     else:
                         prompt_2 = input("¿Que análisis quieres que realice la IA? Escribe tu pregunta o indicación para el análisis: ")
+                        detalles_dia = ""
                         for c in cuentas_dia:
                             detalles_dia += f"- Cliente: {c['cliente']}, Total: ${c['total']}, Propina: {c['propina_pct']}%, Personas: {c['personas']}, Hora: {c['hora']}\n" 
                             facturado_dia_ia = sum(c['total'] for c in cuentas_dia)  
