@@ -19,6 +19,8 @@ Mi camino aprendiendo Python desde cero, en mayo de 2026.
 - **api_desde_cero.py** — Practica de APIs desde cero nivel por nivel.
 - **practica_paises.py** — Practica de APIs, navegación de JSON anidado y lectura de JSON crudo.
 - **caja.py** — Sistema de caja con menu, manejo de errores de rango, tipo, persistencia, diccionarios, listas, listas de diccionarios.
+- **prueba_ia.py** — Prueba de integración de IA al sistema por API key.
+- **prueba_prompt.py** — Prueba prompt para analisis de datos con IA(CLAUDE).
 
 
 ## Aprendizajes clave
@@ -46,6 +48,8 @@ Mi camino aprendiendo Python desde cero, en mayo de 2026.
 - Verificar status codes (200 vs 404).
 - Navegar JSON anidado (listas dentro de diccionarios, diccionarios dentro de diccionarios).
 - Manejo de errores de conexión y de recursos inexistentes.
+- Manejo de APIs.
+- Integración de IA a sistemas internos.
 
 ## Evolución del proyecto
 
