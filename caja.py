@@ -3,6 +3,8 @@ import sys
 from datetime import datetime
 import json
 from collections import Counter
+import os
+from anthropic import Anthropic
 
 #   --- FUNCIONES ---   
 
@@ -62,7 +64,8 @@ while intentos_menu < 2: #Mientras el contador de intentos_menu sea menor a 2 si
         print("2. Ver resumen del día.")
         print("3. Ver historial completo.")
         print("4. Buscar cuentas por cliente")
-        print("5. Salir")
+        print("5. Analisis de caja con IA(CLAUDE)")
+        print("6. Salir")
 
         opcion = int(input(f"\nElige una opción: ")) #Pedimos al usuario elegir una opcion entre 1 y 5, y lo convertimos a entero.
 
@@ -148,7 +151,82 @@ while intentos_menu < 2: #Mientras el contador de intentos_menu sea menor a 2 si
                         encontrado = True
                 if not encontrado:
                     print(f"No se encontró ninguna cuenta para el cliente: {busqueda}")
-        elif opcion in [5]: #Si la opcion es 5 paramos el bucle y se cierra el sistema.
+        elif opcion in [5]:
+            try:
+                #Opciones
+                print("1. Analizar el facturado historico.")
+                print("2. Analizar facturado del día.")
+                opcion_ia = int(input(f"\n¿Que quieres analizar hoy? "))
+                detalles_historial = ""
+                detalles_día = ""
+                cliente = Anthropic()
+
+                if opcion_ia in [1]:
+                    if len(historial_cuentas) == 0:
+                        print("No hay ninguna cuenta registrada en el historial. Registra una y intenta de nuevo.")
+                    else:
+                        prompt_1 = input("¿Que análisis quieres que realice la IA? Escribe tu pregunta o indicación para el análisis: ")
+                        for c in historial_cuentas:
+                            detalles_historial += f"- Cliente: {c['cliente']}, Total: ${c['total']}, Propina: {c['propina_pct']}%, Personas: {c['personas']}, Hora: {c['hora']}\n"
+                            facturado_total_ia = sum(c['total'] for c in historial_cuentas)
+
+                        mensaje_historico = cliente.messages.create(
+                            model="claude-opus-4-8",
+                            max_tokens=1024,
+                            system=f"""Eres un analista de mercado y economista especializado con negocios pequeños y medianos. Analizà los siguientes datos de caja y dame 3 observaciones útiles y accionables para el dueño. Sé concreto y breve.
+                                        
+                            === Datos de la jornada ===
+                            - Cantidad de cuentas registradas: {len(historial_cuentas)}
+                            - Total facturado historico: {facturado_total_ia}
+
+                            Detalle cuentas:
+                                \n{detalles_historial}
+
+                            Dame tu análisis en lenguaje claro, como si le hablaras al dueño del restaurante.""",
+                            messages=[
+                                {"role": "user", "content": prompt_1}
+                            ]
+                        )
+
+                    print("\n=== ANÁLISIS DE LA IA ===\n")
+                    print(mensaje_historico.content[0].text)
+
+                elif opcion_ia in [2]:
+                    if len(cuentas_dia) == 0:
+                        print("No haz registrado cuentas en el Día de hoy. Registra una y vuelve a intentarlo.") #Si no hay cuentas registradas en el día se le informa al usuario.
+                    else:
+                        prompt_2 = input("¿Que análisis quieres que realice la IA? Escribe tu pregunta o indicación para el análisis: ")
+                        for c in cuentas_dia:
+                            detalles_dia += f"- Cliente: {c['cliente']}, Total: ${c['total']}, Propina: {c['propina_pct']}%, Personas: {c['personas']}, Hora: {c['hora']}\n" 
+                            facturado_dia_ia = sum(c['total'] for c in cuentas_dia)  
+
+
+                        mensaje_dia = cliente.messages.create(
+                            model="claude-opus-4-8",
+                            max_tokens=1024,
+                            system= f"""Eres un analista de mercado y economista especializado con negocios pequeños y medianos. Analizà los siguientes datos de caja y dame 3 observaciones útiles y accionables para el dueño. Sé concreto y breve.
+                                        
+                                === Datos de la jornada ===
+                                - Cantidad de cuentas registradas: {len(cuentas_dia)}
+                                - Total facturado historico: {facturado_dia_ia}
+
+                                Detalle cuentas:
+                                    \n{detalles_dia}
+
+                                Dame tu análisis en lenguaje claro, como si le hablaras al dueño del restaurante.""",
+                                messages=[
+                                    {"role": "user", "content": prompt_2}
+                                ]
+                            )
+                                    
+                        print("\n=== ANÁLISIS DE LA IA ===\n")
+                        print(mensaje_dia.content[0].text)
+
+                else:
+                    print("Lo siento eso no es una opcion valida. Intenta de nuevo.")
+            except ValueError:
+                print("Debes de elegir una opcion valida.")               
+        elif opcion in [6]: #Si la opcion es 5 paramos el bucle y se cierra el sistema.
             print(f"\nSaliendo del programa...")
             break
         else: #Si la opcion no esta entre 1 y 5 el usuario debe de intentar de nuevo.
