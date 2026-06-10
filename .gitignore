@@ -3,6 +3,7 @@ historial.json
 prueba.json
 practica_apis.py
 historial_caja.json
+memoria_asistente.json
 
 # Cache de Python (Python lo genera automáticamente al ejecutar)
 __pycache__/
