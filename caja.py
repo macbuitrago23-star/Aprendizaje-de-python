@@ -22,10 +22,7 @@ def cuenta_nueva(mensaje, tipo, minimo, maximo, max_intentos= 2): #Definimos cue
             print("Parece que eso no es un numero valido. Intenta de nuevo.")
             intentos += 1 #Sumamos un intento más al usuario.
 
-
-        if intentos == 2: #Cuando los intentos se agotan cerramos el sistema.
-            print(f"Lo siento pero tus intentos se agotaron. Cerrando el programa...")
-            sys.exit()
+    raise ValueError("Se agotaron los intentos para ingresar un valor valido.")
 
 # --- PERSISTENCIA ---
 
@@ -99,41 +96,44 @@ while intentos_menu < 2: #Mientras el contador de intentos_menu sea menor a 2 si
         opcion = int(input(f"\nElige una opción: ")) #Pedimos al usuario elegir una opcion entre 1 y 5, y lo convertimos a entero.
 
         if opcion in [1]: #Solo si 1 esta en opcion ejecutamos el codigo adentro.
-            nombre_usuario = input("¿Cual es el nombre del cliente? ").strip().title() #Pedimos el nombre del cliente.
-            cuenta = cuenta_nueva("¿Cual es la cuenta del cliente? ", float, 50, 100000000) #Llamamos a la funcion cuenta_nueva para obtener el valor de la cuenta, con un rango entre 50 y 100 millones.
-            propina_porcentaje = cuenta_nueva("¿Que propina va a dejar el cliente? ", float, 0, 100) #Llamamos a la funcion cuenta_nueva para el porcentaje de propina, con un rango entre 0 y 100.
-            personas = cuenta_nueva("¿Cuantas personas pagan? ", int, 1, 1000) #Llamamos a la funcion cuenta_nueva para el numero de personas, con un rango entre 1 y 1000.
-            registro_fecha = datetime.now() #Guardamos la fecha y hora actual en la variable registro_fecha.
-            fecha = registro_fecha.strftime("%Y-%m-%d") #Formateamos la fecha a un formato legible y la guardamos en la variable fecha.
-            hora = registro_fecha.strftime("%H:%M") #Formateamos la hora a un formato legible y la guardamos en la variable hora.
+            try:
+                nombre_usuario = input("¿Cual es el nombre del cliente? ").strip().title() #Pedimos el nombre del cliente.
+                cuenta = cuenta_nueva("¿Cual es la cuenta del cliente? ", float, 50, 100000000) #Llamamos a la funcion cuenta_nueva para obtener el valor de la cuenta, con un rango entre 50 y 100 millones.
+                propina_porcentaje = cuenta_nueva("¿Que propina va a dejar el cliente? ", float, 0, 100) #Llamamos a la funcion cuenta_nueva para el porcentaje de propina, con un rango entre 0 y 100.
+                personas = cuenta_nueva("¿Cuantas personas pagan? ", int, 1, 1000) #Llamamos a la funcion cuenta_nueva para el numero de personas, con un rango entre 1 y 1000.
+                registro_fecha = datetime.now() #Guardamos la fecha y hora actual en la variable registro_fecha.
+                fecha = registro_fecha.strftime("%Y-%m-%d") #Formateamos la fecha a un formato legible y la guardamos en la variable fecha.
+                hora = registro_fecha.strftime("%H:%M") #Formateamos la hora a un formato legible y la guardamos en la variable hora.
 
-            #Calculos
-            monto_propina = cuenta * propina_porcentaje / 100
-            cuenta_final = cuenta + monto_propina
-            pago_por_persona = cuenta_final / personas
+                #Calculos
+                monto_propina = cuenta * propina_porcentaje / 100
+                cuenta_final = cuenta + monto_propina
+                pago_por_persona = cuenta_final / personas
 
-            #Resultados
-            print(f"\nCuenta registrada con exito --- FECHA: {fecha} | HORA: {hora} ---")
-            print(f"\nNombre del cliente: {nombre_usuario}")
-            print(f"Cuenta del cliente: ${round(cuenta, 2)}")
-            print(f"Propina: ({propina_porcentaje}%): ${round(monto_propina, 2)}")
-            print(f"Total de la cuenta con propina: ${round(cuenta_final, 2)}")
-            print(f"Total de pago por persona: ${round(pago_por_persona, 2)}")
+                #Resultados
+                print(f"\nCuenta registrada con exito --- FECHA: {fecha} | HORA: {hora} ---")
+                print(f"\nNombre del cliente: {nombre_usuario}")
+                print(f"Cuenta del cliente: ${round(cuenta, 2)}")
+                print(f"Propina: ({propina_porcentaje}%): ${round(monto_propina, 2)}")
+                print(f"Total de la cuenta con propina: ${round(cuenta_final, 2)}")
+                print(f"Total de pago por persona: ${round(pago_por_persona, 2)}")
 
-            #Datos diccionario guardados en cuenta_actual.
-            cuenta_actual["cliente"] = nombre_usuario
-            cuenta_actual["cuenta"] = cuenta
-            cuenta_actual["propina_pct"] = propina_porcentaje
-            cuenta_actual["propina_monto"] = monto_propina
-            cuenta_actual["total"] = cuenta_final
-            cuenta_actual["personas"] = personas
-            cuenta_actual["pago_por_persona"] = pago_por_persona
-            cuenta_actual["fecha"] = fecha
-            cuenta_actual["hora"] = hora
+                #Datos diccionario guardados en cuenta_actual.
+                cuenta_actual["cliente"] = nombre_usuario
+                cuenta_actual["cuenta"] = cuenta
+                cuenta_actual["propina_pct"] = propina_porcentaje
+                cuenta_actual["propina_monto"] = monto_propina
+                cuenta_actual["total"] = cuenta_final
+                cuenta_actual["personas"] = personas
+                cuenta_actual["pago_por_persona"] = pago_por_persona
+                cuenta_actual["fecha"] = fecha
+                cuenta_actual["hora"] = hora
 
-            cuentas_dia.append(cuenta_actual) #Agregamos la cuenta actual a la lista de cuentas_dia.
-            historial_cuentas.append(cuenta_actual) #Agregamos la cuenta actual a la lista de historial_cuentas para mantener un registro completo.
-            guardar_historial(historial_cuentas) #Llamamos a la funcion guardar_historial para actualizar el archivo JSON con el nuevo historial de cuentas.
+                cuentas_dia.append(cuenta_actual) #Agregamos la cuenta actual a la lista de cuentas_dia.
+                historial_cuentas.append(cuenta_actual) #Agregamos la cuenta actual a la lista de historial_cuentas para mantener un registro completo.
+                guardar_historial(historial_cuentas) #Llamamos a la funcion guardar_historial para actualizar el archivo JSON con el nuevo historial de cuentas.
+            except ValueError:
+                print(f"\nRegistro cancelado: demasiados intentos fallidos. Volviendo al menú.")
         elif opcion in [2]: #Consultamos el registro diario si 2 esta en opcion.
             if len(cuentas_dia) == 0: 
                 print("Lo siento no haz registrado ninguna cuenta. Registra una.") #Si no hay cuentas registradas se le avisa al usuario.
@@ -214,5 +214,4 @@ while intentos_menu < 2: #Mientras el contador de intentos_menu sea menor a 2 si
             print(f"Lo siento tus intentos se acabaron. Cerrando el programa...")
             sys.exit()
 #TODO: 
-# Raise
 # Deuda tecnica crear un ID uno por cliente.
