@@ -22,6 +22,7 @@ Mi camino aprendiendo Python desde cero, en mayo de 2026.
 - **prueba_ia.py** — Prueba de integración de IA al sistema por API key.
 - **prueba_prompt.py** — Prueba prompt para analisis de datos con IA(CLAUDE).
 - **asistente.py** — Chatbot con IA integrada, memoria persistente y chat separado por usuario.
+- **bot_telegram.py** — Chatbot con IA, con interfaz en telegram, separación por chat y persistencia.
 
 
 ## Aprendizajes clave
